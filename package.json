@@ -1,0 +1,23 @@
+{
+  "name": "disneyland-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gkjohnson/disneyland-tracker.git"
+  },
+  "author": "Garrett Johnson <garrett.kjohnson@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gkjohnson/disneyland-tracker/issues"
+  },
+  "homepage": "https://github.com/gkjohnson/disneyland-tracker#readme",
+  "dependencies": {
+    "lokijs": "^1.5.0",
+    "themeparks": "^4.3.4"
+  }
+}
