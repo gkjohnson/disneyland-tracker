@@ -12,9 +12,8 @@ const pad = (str, char, width) => {
 const _do = () => {
     park.GetWaitTimes(function(err, rides) {
         rides.forEach(ride => {
-            if (lastTimes[ride.id] && lastTimes[ride.id].lastUpdate !== ride.lastUpdate) {
-                const delta = ride.lastUpdate - lastTimes[ride.id].lastUpdate
-                console.log(`${pad(ride.name, ' ', 65)} from ${lastTimes[ride.id].waitTime} to ${ride.waitTime}min\t\tafter ${delta}ms`)
+            if (lastTimes[ride.id] && lastTimes[ride.id].waitTime !== ride.waitTime) {
+                console.log(`${pad(ride.name, ' ', 65)} from ${lastTimes[ride.id].waitTime} to ${ride.waitTime}min`)
             } else if (!lastTimes[ride.id]) {
                 console.log(`${pad(ride.name, ' ', 65)} wait is ${ride.waitTime}min`)
             }
