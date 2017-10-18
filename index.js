@@ -17,7 +17,7 @@ const pad = (str, char, width) => {
 }
 
 // iterative check for ride data
-const _do = () => {
+const pollForUpdates = () => {
     park.GetWaitTimes((err, rides) => {
         if (err) {
             console.error(err)
@@ -52,7 +52,7 @@ const _do = () => {
             lastTimes[ride.id] = ride
         })
 
-        setTimeout(_do, POLL_RATE)
+        setTimeout(pollForUpdates, POLL_RATE)
     })
 }
 
@@ -73,5 +73,4 @@ process.on('SIGINT', onClose);
 process.on('SIGUSR1', onClose);
 process.on('SIGUSR2', onClose);
 
-
-_do()
+pollForUpdates()
