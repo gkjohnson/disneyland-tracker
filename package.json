@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/gkjohnson/disneyland-tracker#readme",
   "dependencies": {
+    "highcharts": "^6.0.1",
     "lokijs": "^1.5.0",
     "themeparks": "^4.3.4"
   }

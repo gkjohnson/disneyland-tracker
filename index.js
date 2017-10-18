@@ -20,7 +20,7 @@ const pad = (str, char, width) => {
 const pollForUpdates = () => {
     park.GetWaitTimes((err, rides) => {
         if (err) {
-            console.error(err)
+            console.error('ERROR', err)
             return
         }
 
