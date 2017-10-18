@@ -1,4 +1,8 @@
+const fs = require('fs')
 const ThemeParks = require('themeparks')
+
+const DB_PATH = './db/times.json'
+const POLL_RATE = 1e4
 
 const park = new ThemeParks.Parks.DisneylandResortMagicKingdom()
 const lastTimes = {}
@@ -21,7 +25,7 @@ const _do = () => {
             lastTimes[ride.id] = ride
         })
 
-        setTimeout(_do, 10 * 1e3)
+        setTimeout(_do, POLL_RATE)
     })
 }
 
