@@ -1,5 +1,8 @@
 const fs = require('fs')
 const ThemeParks = require('themeparks')
+const express = require('express')
+const socketio = require('socket.io')
+const http = require('http')
 
 // Constants
 const DB_PATH = './db/times.json'       // json file to save to
@@ -9,6 +12,13 @@ const park = new ThemeParks.Parks.DisneylandResortMagicKingdom()
 const lastTimes = {}
 const data = (fs.existsSync(DB_PATH) ? fs.readFileSync(DB_PATH, 'utf8') : null) || {}
 
+/* Server */
+const app = express()
+const server = http.Server(app)
+const io = socketio(server)
+app.use(express.static('/'))
+
+/* Theme Park Polling */
 // pad a string with a character
 const pad = (str, char, width) => {
     if (str.length >= width) return str
@@ -56,6 +66,7 @@ const pollForUpdates = () => {
     })
 }
 
+/* Application exit */
 // save the history on close
 const onClose = () => {
     fs.writeFileSync(DB_PATH, JSON.stringify(data))
@@ -73,4 +84,7 @@ process.on('SIGINT', onClose);
 process.on('SIGUSR1', onClose);
 process.on('SIGUSR2', onClose);
 
+/* Start */
 pollForUpdates()
+app.listen(8080)
+console.log('listening on 8080')
