@@ -16,7 +16,7 @@ const data = (fs.existsSync(DB_PATH) ? fs.readFileSync(DB_PATH, 'utf8') : null) 
 const app = express()
 const server = http.Server(app)
 const io = socketio(server)
-app.use(express.static('/'))
+app.use(express.static('static'))
 
 /* Theme Park Polling */
 // pad a string with a character
