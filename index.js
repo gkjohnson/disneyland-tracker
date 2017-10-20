@@ -17,6 +17,7 @@ const app = express()
 const server = http.Server(app)
 const io = socketio(server)
 app.use(express.static('static'))
+app.use(express.static('.'))
 
 /* Theme Park Polling */
 // pad a string with a character
