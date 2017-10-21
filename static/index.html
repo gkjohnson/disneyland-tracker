@@ -2,11 +2,18 @@
 <html>
     <head>
         <title>DisneyLand Ride Tracker</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet"/>
         <script type="text/javascript" src="/node_modules/highcharts/highcharts.js"></script>
+        <style type="text/css">
+            body { font-family: "Roboto", sans-serif; }
+            h1 { font-weight: 300; }
+        </style>
     </head>
     <body>
+        <h1>Wait Times</h1>
+        <div id="chart"></div>
         <script type="text/javascript">
-            console.log(Highcharts)
+            const chart = Highcharts.chart('chart', { title:null })
         </script>
     </body>
 </html>
