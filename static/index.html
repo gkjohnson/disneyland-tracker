@@ -3,17 +3,67 @@
     <head>
         <title>DisneyLand Ride Tracker</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet"/>
-        <script type="text/javascript" src="/node_modules/highcharts/highcharts.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/highcharts/highcharts.js"></script>
         <style type="text/css">
             body { font-family: "Roboto", sans-serif; }
             h1 { font-weight: 300; }
+            h2 {
+                font-weight: 300;
+                border-bottom: 1px solid black;
+                text-align: right;
+            }
+
+            #now-chart {
+                height: 1000px;
+            }
         </style>
     </head>
     <body>
         <h1>Wait Times</h1>
-        <div id="chart"></div>
+        <h2>Now</h2>
+        <div id="now-chart"></div>
+        <h2>Since ...</h2>
+        <div id="time-chart"></div>
         <script type="text/javascript">
-            const chart = Highcharts.chart('chart', { title:null })
+            const nc = Highcharts.chart('now-chart', {
+                title: null,
+                credits: { enabled: false },
+                xAxis: { categories: [] },
+                chart: { animation: false },
+                plotOptions: { series: { animation: false } },
+                series: [{
+                    type: 'bar',
+                    colorByPoint: true,
+                    data: [],
+                    showInLegend: false
+                }]
+            })
+
+            const tc = Highcharts.chart('time-chart', {
+                title: null,
+                credits: { enabled: false }
+            })
+
+            io = io()
+            io.on('current-times', times => {
+                const data = []
+                const categories = []
+                Object
+                    .keys(times)
+                    .forEach((key, i) => {
+                        categories.push(times[key].name)
+                        data.push([times[key].waitTime])
+                    })
+
+                nc.update({
+                    xAxis: { categories },
+                    series: [{ data }]
+                })
+            })
+
+            nc.reflow()
+            tc.reflow()
         </script>
     </body>
 </html>

@@ -13,11 +13,13 @@ const lastTimes = {}
 const data = (fs.existsSync(DB_PATH) ? JSON.parse(fs.readFileSync(DB_PATH, 'utf8') || '{}') : null) || {}
 
 /* Server */
-const app = express()
-const server = http.Server(app)
-const io = socketio(server)
+var app = express();
+var server = http.Server(app);
+var io = socketio.listen(server);
+app.get('/times', (req, res) => res.send(data))
 app.use(express.static('static'))
-app.use(express.static('.'))
+app.use(express.static('node_modules'))
+io.on('connection', client => client.emit('current-times', lastTimes))
 
 /* Theme Park Polling */
 // pad a string with a character
@@ -63,6 +65,8 @@ const pollForUpdates = () => {
             lastTimes[ride.id] = ride
         })
 
+        io.emit('current-times', lastTimes)
+
         setTimeout(pollForUpdates, POLL_RATE)
     })
 }
@@ -87,5 +91,4 @@ process.on('SIGUSR2', onClose);
 
 /* Start */
 pollForUpdates()
-app.listen(8080)
-console.log('listening on 8080')
+server.listen(8080, () => console.log('listening on 8080'))
