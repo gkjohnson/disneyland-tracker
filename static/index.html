@@ -75,7 +75,14 @@
                 title: null,
                 credits: { enabled: false },
                 yAxis: { title: { text: 'Wait Time (minutes)' } },
-                xAxis: { title: { text: 'Date' } },
+                xAxis: {
+                    dateTimeLabelFormats: {
+                        month: '%e. %b',
+                        year: '%b'
+                    },
+                    type: 'datetime',
+                    title: { text: 'Date' }
+                },
                 chart: { animation: false },
                 legend: { enabled: false },
                 plotOptions: {
@@ -92,8 +99,8 @@
                 arr.forEach(ride => {
                     seriesdata[ride.id] = seriesdata[ride.id] || { name: ride.name, data: [], series: null }
                     
-                    // TODO: Use date object for the x axis
-                    seriesdata[ride.id].data.push(ride.waitTime)
+                    // TODO: why is the date not displaying on the x axis?
+                    seriesdata[ride.id].data.push([new Date(ride.date).toUTCString(), ride.waitTime])
                 })
             }
 
@@ -111,9 +118,7 @@
                             })
                         }
 
-                        s.series.update({
-                            data: s.data
-                        })
+                        s.series.update({ data: s.data })
                     })
             }
 
