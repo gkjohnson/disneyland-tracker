@@ -32,6 +32,9 @@
         <h2>Since ...</h2>
         <div id="time-chart"></div>
         <script type="text/javascript">
+            io = io()
+
+            // The chart of current wait times
             const nc = Highcharts.chart('now-chart', {
                 title: null,
                 credits: { enabled: false },
@@ -46,12 +49,6 @@
                 }]
             })
 
-            const tc = Highcharts.chart('time-chart', {
-                title: null,
-                credits: { enabled: false }
-            })
-
-            io = io()
             io.on('current-times', times => {
                 const data = []
                 const categories = []
@@ -67,6 +64,29 @@
                     series: [{ data }]
                 })
             })
+
+            // The chart of historical wait times
+            const tc = Highcharts.chart('time-chart', {
+                title: null,
+                credits: { enabled: false }
+            })
+
+            const pointsQueue = []
+            let history = null
+            const processPoints = arr => {
+                arr.forEach(pt => {
+
+                })
+            }
+
+            fetch('/times')
+                .then(data => data.json())
+                .then(hist => {
+                    history = hist
+                    pointsQueue
+                        .reverse()
+                        .forEach(arr => processPoints(arr))
+                })
 
             nc.reflow()
             tc.reflow()
