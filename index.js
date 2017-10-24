@@ -60,7 +60,7 @@ const pollForUpdates = () => {
                     fastPass:   ride.fastPass
                 }
                 arr.push(newTime)
-                newTimes.push(newTime)
+                newTimes.push(Object.assign({}, newTime, { id: ride.id }))
                 data[ride.id] = arr
             }
 

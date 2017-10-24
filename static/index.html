@@ -23,6 +23,10 @@
                 */
                 height: 1000px;
             }
+
+            #time-chart {
+                height: 600px;
+            }
         </style>
     </head>
     <body>
@@ -41,11 +45,11 @@
                 xAxis: { categories: [] },
                 chart: { animation: false },
                 plotOptions: { series: { animation: false } },
+                legend: { enabled: false },
                 series: [{
                     type: 'bar',
                     colorByPoint: true,
-                    data: [],
-                    showInLegend: false
+                    data: []
                 }]
             })
 
@@ -68,25 +72,75 @@
             // The chart of historical wait times
             const tc = Highcharts.chart('time-chart', {
                 title: null,
-                credits: { enabled: false }
+                credits: { enabled: false },
+                chart: { animation: false },
+                legend: { enabled: false },
+                plotOptions: {
+                    series: { animation: false },
+                    line: { marker: { enabled: false } }
+                }
             })
 
-            const pointsQueue = []
-            let history = null
-            const processPoints = arr => {
-                arr.forEach(pt => {
-
+            let pointsQueue = []
+            let seriesdata = null
+            const processRides = arr => {
+                arr.forEach(ride => {
+                    seriesdata[ride.id] = seriesdata[ride.id] || { name: ride.name, data: [], series: null }
+                    seriesdata[ride.id].data.push(ride.waitTime)
                 })
+            }
+
+            const updateSeries = () => {
+                Object
+                    .keys(seriesdata)
+                    .forEach(id => {
+                        const s = seriesdata[id]
+                        if (s.series === null) {
+                            s.series = tc.addSeries({
+                                type: 'line',
+                                data: [],
+                                name: s.name
+                            })
+                        }
+
+                        s.series.update({
+                            data: s.data
+                        })
+                    })
             }
 
             fetch('/times')
                 .then(data => data.json())
                 .then(hist => {
-                    history = hist
+                    seriesdata = {}
+
+                    Object
+                        .keys(hist)
+                        .forEach(id => {
+                            hist[id]
+                                .map(ride => {
+                                    ride.id = id
+                                    return ride
+                                })
+                            processRides(hist[id])
+                        })
+
                     pointsQueue
                         .reverse()
-                        .forEach(arr => processPoints(arr))
+                        .forEach(arr => processRides(arr))
+                    pointsQueue = null
+
+                    updateSeries()
                 })
+
+            io.on('new-times', arr => {
+                if (seriesdata === null) {
+                    pointsQueue.push(arr)
+                } else {
+                    processRides(arr)
+                    updateSeries()
+                }
+            })
 
             nc.reflow()
             tc.reflow()
