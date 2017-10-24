@@ -38,6 +38,7 @@ const pollForUpdates = () => {
         }
 
         // see if the ride times have changed
+        const newTimes = []
         rides.forEach(ride => {
             // print changes
             if (lastTimes[ride.id] && lastTimes[ride.id].waitTime !== ride.waitTime) {
@@ -49,7 +50,7 @@ const pollForUpdates = () => {
             // save changes to our history
             if (!lastTimes[ride.id] || lastTimes[ride.id].waitTime !== ride.waitTime) {
                 const arr = data[ride.id] || []
-                arr.push({
+                const newTime = {
                     date:       new Date(),
                     name:       ride.name,
                     lastUpdate: ride.lastUpdate,
@@ -57,14 +58,16 @@ const pollForUpdates = () => {
                     active:     ride.active,
                     status:     ride.status,
                     fastPass:   ride.fastPass
-                })
-
+                }
+                arr.push(newTime)
+                newTimes.push(newTime)
                 data[ride.id] = arr
             }
 
             lastTimes[ride.id] = ride
         })
 
+        io.emit('new-times', newTimes)
         io.emit('current-times', lastTimes)
 
         setTimeout(pollForUpdates, POLL_RATE)
