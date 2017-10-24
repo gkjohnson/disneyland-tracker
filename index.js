@@ -10,7 +10,7 @@ const POLL_RATE = 1e4                   // poll rate for checking the servers
 
 const park = new ThemeParks.Parks.DisneylandResortMagicKingdom()
 const lastTimes = {}
-const data = (fs.existsSync(DB_PATH) ? JSON.parse(fs.readFileSync(DB_PATH, 'utf8') || '{}') : null) || {}
+const data = JSON.parse(fs.existsSync(DB_PATH) ? fs.readFileSync(DB_PATH, 'utf8') : '{}')
 
 /* Server */
 var app = express();
