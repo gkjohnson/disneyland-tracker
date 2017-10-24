@@ -43,6 +43,7 @@
                 title: null,
                 credits: { enabled: false },
                 xAxis: { categories: [] },
+                yAxis: { title: { text: 'Wait Time (minutes)' } },
                 chart: { animation: false },
                 plotOptions: { series: { animation: false } },
                 legend: { enabled: false },
@@ -73,6 +74,8 @@
             const tc = Highcharts.chart('time-chart', {
                 title: null,
                 credits: { enabled: false },
+                yAxis: { title: { text: 'Wait Time (minutes)' } },
+                xAxis: { title: { text: 'Date' } },
                 chart: { animation: false },
                 legend: { enabled: false },
                 plotOptions: {
@@ -86,6 +89,7 @@
             const processRides = arr => {
                 arr.forEach(ride => {
                     seriesdata[ride.id] = seriesdata[ride.id] || { name: ride.name, data: [], series: null }
+                    seriesdata[ride.id].data.push(ride.waitTime)
                     seriesdata[ride.id].data.push(ride.waitTime)
                 })
             }
